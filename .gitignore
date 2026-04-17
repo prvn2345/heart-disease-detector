@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+.Python
+
+# Environment files – never commit real secrets
+.env
+*.env.local
+
+# Build output
+frontend/dist/
+frontend/.vite/
+
+# ML model files – excluded (Render re-trains on deploy via build command)
+ml-server/models/*.joblib
+
+# Keep the dataset CSV so Render doesn't need to re-download it
+# ml-server/data/heart.csv  ← intentionally NOT ignored
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
