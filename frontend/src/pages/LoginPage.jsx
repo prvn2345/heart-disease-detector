@@ -38,6 +38,12 @@ export default function LoginPage() {
           <p className="text-gray-400 mt-1">Sign in to your account</p>
         </div>
 
+        {/* Cold start notice */}
+        <div className="card border border-yellow-800 bg-yellow-900/20 py-3 px-4 flex items-start gap-2 text-xs text-yellow-300">
+          <span className="text-lg leading-none">⚡</span>
+          <span>First login may take <strong>30–50 seconds</strong> while the server wakes up. Please be patient.</span>
+        </div>
+
         <div className="card">
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
             {/* Email */}
