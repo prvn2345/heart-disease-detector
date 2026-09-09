@@ -4,10 +4,8 @@
  * and persisting results in MongoDB.
  */
 
-const axios      = require("axios");
 const Prediction = require("../models/Prediction");
-
-const ML_API_URL = process.env.ML_API_URL || "http://localhost:5001";
+const { predictHeartDisease } = require("../utils/mlPredictor");
 
 /** POST /api/predictions  – create a new prediction */
 const createPrediction = async (req, res, next) => {
@@ -34,18 +32,8 @@ const createPrediction = async (req, res, next) => {
       thal:     Number(thal),
     };
 
-    // ── Call Python ML API ────────────────────────────────────────────────────
-    let mlResult;
-    try {
-      const response = await axios.post(`${ML_API_URL}/predict`, inputData, {
-        timeout: 10_000,
-      });
-      mlResult = response.data;
-    } catch (mlErr) {
-      const status  = mlErr.response?.status  || 503;
-      const message = mlErr.response?.data?.error || "ML service unavailable.";
-      return res.status(status).json({ error: message });
-    }
+    // ── Run ML Inference (Python child process / JSON stream) ─────────────────
+    const mlResult = await predictHeartDisease(inputData);
 
     // ── Persist to MongoDB ────────────────────────────────────────────────────
     const prediction = await Prediction.create({
